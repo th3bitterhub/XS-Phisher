@@ -144,7 +144,7 @@ xs-phisher/
 ---
 
 ## 👥 Authors
-
+- **bithub**
 - **ac1x**
 - **bsux**
 
