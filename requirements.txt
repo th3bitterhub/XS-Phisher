@@ -1,0 +1,3 @@
+pagesource
+colorama
+requests
